@@ -15,7 +15,7 @@ namespace STR_Tipo_de_Cambio.Util
                 SboCompany = new Company();
                 SboCompany.Server = ConfigurationManager.AppSettings["SAP_SERVIDOR"];
                 SboCompany.CompanyDB = ConfigurationManager.AppSettings["SAP_BASE"];
-                SboCompany.DbServerType = ConfigurationManager.AppSettings["SAP_TIPO_BASE"] == "HANA" ? BoDataServerTypes.dst_HANADB : BoDataServerTypes.dst_MSSQL2017;
+                SboCompany.DbServerType = getTypeDB(ConfigurationManager.AppSettings["SAP_TIPO_BASE"]);
                 SboCompany.DbUserName = ConfigurationManager.AppSettings["SAP_DBUSUARIO"];
                 SboCompany.DbPassword = ConfigurationManager.AppSettings["SAP_DBPASSWORD"];
                 SboCompany.UserName = ConfigurationManager.AppSettings["SAP_USUARIO"];
@@ -27,6 +27,24 @@ namespace STR_Tipo_de_Cambio.Util
             {
                 string mensaje = ex.Message;
                 throw;
+            }
+        }
+
+        public static BoDataServerTypes getTypeDB(string tipoDB) {
+            switch (tipoDB)
+            {
+                case "HANA":
+                    return BoDataServerTypes.dst_HANADB;
+                case "SQL17":
+                    return BoDataServerTypes.dst_MSSQL2017;
+                case "SQL16":
+                    return BoDataServerTypes.dst_MSSQL2016;
+                case "SQL14":
+                    return BoDataServerTypes.dst_MSSQL2014;
+                case "SQL12":
+                    return BoDataServerTypes.dst_MSSQL2012;
+                default:
+                    throw new Exception("No existe tipo de base de datos");
             }
         }
 
