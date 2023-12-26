@@ -1,0 +1,15 @@
+C:\Users\strat9\source\repos\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\bin\Debug\STR_Tipo_de_Cambio.Util.dll
+C:\Users\strat9\source\repos\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\bin\Debug\STR_Tipo_de_Cambio.Util.pdb
+C:\Users\strat9\source\repos\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\STR_Tipo_de_Cambio.Util.csproj.AssemblyReference.cache
+C:\Users\strat9\source\repos\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\Interop.SAPbobsCOM.dll
+C:\Users\strat9\source\repos\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\STR_Tipo_de_Cambio.Util.csproj.ResolveComReference.cache
+C:\Users\strat9\source\repos\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\STR_Tipo_de_Cambio.Util.csproj.CoreCompileInputs.cache
+C:\Users\strat9\source\repos\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\STR_Tipo_de_Cambio.Util.dll
+C:\Users\strat9\source\repos\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\STR_Tipo_de_Cambio.Util.pdb
+C:\Users\dmechato\Desktop\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\bin\Debug\STR_Tipo_de_Cambio.Util.dll
+C:\Users\dmechato\Desktop\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\bin\Debug\STR_Tipo_de_Cambio.Util.pdb
+C:\Users\dmechato\Desktop\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\Interop.SAPbobsCOM.dll
+C:\Users\dmechato\Desktop\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\STR_Tipo_de_Cambio.Util.csproj.ResolveComReference.cache
+C:\Users\dmechato\Desktop\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\STR_Tipo_de_Cambio.Util.csproj.CoreCompileInputs.cache
+C:\Users\dmechato\Desktop\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\STR_Tipo_de_Cambio.Util.dll
+C:\Users\dmechato\Desktop\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio\STR_Tipo_de_Cambio.Util\obj\Debug\STR_Tipo_de_Cambio.Util.pdb

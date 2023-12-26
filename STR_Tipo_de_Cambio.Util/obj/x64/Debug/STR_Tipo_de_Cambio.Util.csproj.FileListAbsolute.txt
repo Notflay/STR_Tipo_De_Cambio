@@ -1,0 +1,8 @@
+D:\Chamba Backend\Tipo de Cambio\STR_Tipo_de_Cambio - copia\STR_Tipo_de_Cambio.Util\bin\x64\Debug\STR_Tipo_de_Cambio.Util.dll
+D:\Chamba Backend\Tipo de Cambio\STR_Tipo_de_Cambio - copia\STR_Tipo_de_Cambio.Util\bin\x64\Debug\STR_Tipo_de_Cambio.Util.pdb
+D:\Chamba Backend\Tipo de Cambio\STR_Tipo_de_Cambio - copia\STR_Tipo_de_Cambio.Util\obj\x64\Debug\STR_Tipo_de_Cambio.Util.csproj.AssemblyReference.cache
+D:\Chamba Backend\Tipo de Cambio\STR_Tipo_de_Cambio - copia\STR_Tipo_de_Cambio.Util\obj\x64\Debug\Interop.SAPbobsCOM.dll
+D:\Chamba Backend\Tipo de Cambio\STR_Tipo_de_Cambio - copia\STR_Tipo_de_Cambio.Util\obj\x64\Debug\STR_Tipo_de_Cambio.Util.csproj.ResolveComReference.cache
+D:\Chamba Backend\Tipo de Cambio\STR_Tipo_de_Cambio - copia\STR_Tipo_de_Cambio.Util\obj\x64\Debug\STR_Tipo_de_Cambio.Util.csproj.CoreCompileInputs.cache
+D:\Chamba Backend\Tipo de Cambio\STR_Tipo_de_Cambio - copia\STR_Tipo_de_Cambio.Util\obj\x64\Debug\STR_Tipo_de_Cambio.Util.dll
+D:\Chamba Backend\Tipo de Cambio\STR_Tipo_de_Cambio - copia\STR_Tipo_de_Cambio.Util\obj\x64\Debug\STR_Tipo_de_Cambio.Util.pdb
