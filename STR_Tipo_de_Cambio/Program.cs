@@ -116,14 +116,54 @@ namespace STR_Tipo_de_Cambio
             {
                 List<string> TipoCambio = new List<string>();
 
-                // Configurar el driver de Selenium para usar Google Chrome
-               
+                string url = "https://www.sbs.gob.pe/app/pp/sistip_portal/paginas/publicacion/tipocambiopromedio.aspx";
 
-                // Abrir Google Chrome
-                driver.Navigate().GoToUrl("https://www.sbs.gob.pe/app/pp/sistip_portal/paginas/publicacion/tipocambiopromedio.aspx");
+                int intentos = 0;
 
-                // Obtener el HTML de la página actual
-                string html = driver.PageSource;
+                string html = "";
+                while (intentos < 3) // Intenta 3 veces, puedes ajustar este número según tu necesidad
+                {
+                    try
+                    {
+                        driver.Navigate().GoToUrl(url);
+
+                        html = driver.PageSource;
+
+                        // Verificar si el HTML contiene el mensaje "Request unsuccessful"
+                        if (html.Contains("Request unsuccessful"))
+                        {
+                            Console.WriteLine("El mensaje 'Request unsuccessful' fue detectado. Refrescando la página...");
+
+                            driver.Navigate().Refresh();
+
+                            intentos++;
+                            System.Threading.Thread.Sleep(1000);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    catch (WebDriverException ex)
+                    {
+                        Console.WriteLine($"Error al cargar la página: {ex.Message}");
+
+                        // Incrementar el contador de intentos
+                        intentos++;
+
+                        // Esperar un tiempo antes de intentar de nuevo (por ejemplo, 5 segundos)
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                }
+
+             //   string html = driver.PageSource;
+
+                // Si el contador de intentos es igual al número máximo de intentos, mostrar un mensaje de error
+                if (intentos == 3)
+                {
+                    Console.WriteLine("Se ha alcanzado el número máximo de intentos. La página no se pudo cargar.");
+                }
+
 
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(html);

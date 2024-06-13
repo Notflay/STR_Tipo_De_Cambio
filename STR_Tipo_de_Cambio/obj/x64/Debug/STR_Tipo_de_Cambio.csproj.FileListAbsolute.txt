@@ -195,3 +195,4 @@ C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio\obj\x64\De
 C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio\obj\x64\Debug\STR_Tipo.72F00104.Up2Date
 C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio\obj\x64\Debug\STR_Tipo_de_Cambio.exe
 C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio\obj\x64\Debug\STR_Tipo_de_Cambio.pdb
+C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio\bin\x64\Debug\conexion.xml
