@@ -100,6 +100,10 @@ namespace STR_Tipo_de_Cambio
         }
         private static async Task IntegrarTipoDeCambioSelenium(SBO sbo)
         {
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--headless"); // Para ejecución en segundo plano
+            IWebDriver driver = new ChromeDriver(options);
+
             string date = System.DateTime.Now.ToString("yyyy-MM-dd");
 
             // Que el sistema detecté el tipo de Cambio según el formato
@@ -113,9 +117,7 @@ namespace STR_Tipo_de_Cambio
                 List<string> TipoCambio = new List<string>();
 
                 // Configurar el driver de Selenium para usar Google Chrome
-                ChromeOptions options = new ChromeOptions();
-                options.AddArgument("--headless"); // Para ejecución en segundo plano
-                IWebDriver driver = new ChromeDriver(options);
+               
 
                 // Abrir Google Chrome
                 driver.Navigate().GoToUrl("https://www.sbs.gob.pe/app/pp/sistip_portal/paginas/publicacion/tipocambiopromedio.aspx");
@@ -146,6 +148,9 @@ namespace STR_Tipo_de_Cambio
                     throw new Exception("Aun no se ha actualizado el tipo de Cambio SBS");
                 double tipoCambio = Convert.ToDouble(TipoCambio[1]);
 
+                // Cerrar el navegador
+                driver.Quit();
+
                 SAPbobsCOM.SBObob bo = SAPConnector.SboCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
                 Console.WriteLine("Actualizando Tipo de Cambio " + tipoCambio  + " " + date + ".....");
                 Log.WriteToFile("Actualizando Tipo de Cambio " + date + ".....");
@@ -155,6 +160,8 @@ namespace STR_Tipo_de_Cambio
             }
             catch (Exception ex)
             {
+                // Cerrar el navegador
+                driver.Quit();
                 Log.WriteToFile($"Metodo IntegrarTipoDeCambioSelenium - Error al Actualizar en SAP {sbo.SAP_BASE} -:" + ex.Message);
                 IntegrarTipoCambioSBS(sbo).Wait();
             }
