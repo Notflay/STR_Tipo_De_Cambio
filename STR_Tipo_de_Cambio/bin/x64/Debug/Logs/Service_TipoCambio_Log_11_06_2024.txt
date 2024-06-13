@@ -1,0 +1,8 @@
+11/06/2024 18:53:10 - Metodo SBS - Error al Actualizar en SAP SBO_CRL_210922 :Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+11/06/2024 18:53:25 - Actualizando Tipo de Cambio SBO_CRL_210922 - 11/06/2024.....
+11/06/2024 18:53:25 - Tipo de Cambio del dia SBO_CRL_210922 - 11/06/2024 : 3.781
+11/06/2024 18:54:44 - Metodo SBS - Error al Actualizar en SAP SBO_CRL_210922 :Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+11/06/2024 18:54:48 - Actualizando Tipo de Cambio SBO_CRL_210922 - 11/06/2024.....
+11/06/2024 18:54:48 - Tipo de Cambio del dia SBO_CRL_210922 - 11/06/2024 : 3.781

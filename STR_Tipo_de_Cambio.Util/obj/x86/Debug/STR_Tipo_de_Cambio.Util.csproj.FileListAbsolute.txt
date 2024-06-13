@@ -14,3 +14,11 @@ C:\Users\DURBAY\Source\Repos\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\obj\x86\
 C:\Users\DURBAY\Source\Repos\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\obj\x86\Debug\STR_Tipo_de_Cambio.Util.csproj.CoreCompileInputs.cache
 C:\Users\DURBAY\Source\Repos\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\obj\x86\Debug\STR_Tipo_de_Cambio.Util.dll
 C:\Users\DURBAY\Source\Repos\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\obj\x86\Debug\STR_Tipo_de_Cambio.Util.pdb
+C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\bin\x86\Debug\STR_Tipo_de_Cambio.Util.dll
+C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\bin\x86\Debug\STR_Tipo_de_Cambio.Util.pdb
+C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\obj\x86\Debug\STR_Tipo_de_Cambio.Util.csproj.AssemblyReference.cache
+C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\obj\x86\Debug\Interop.SAPbobsCOM.dll
+C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\obj\x86\Debug\STR_Tipo_de_Cambio.Util.csproj.ResolveComReference.cache
+C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\obj\x86\Debug\STR_Tipo_de_Cambio.Util.csproj.CoreCompileInputs.cache
+C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\obj\x86\Debug\STR_Tipo_de_Cambio.Util.dll
+C:\Users\sebastian.poma\Desktop\STR_Tipo_De_Cambio\STR_Tipo_de_Cambio.Util\obj\x86\Debug\STR_Tipo_de_Cambio.Util.pdb

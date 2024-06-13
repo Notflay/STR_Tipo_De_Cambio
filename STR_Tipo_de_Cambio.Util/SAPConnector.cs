@@ -12,6 +12,7 @@ namespace STR_Tipo_de_Cambio.Util
         {
             try
             {
+                /*
                 SboCompany = new Company();
                 SboCompany.Server = ConfigurationManager.AppSettings["SAP_SERVIDOR"];
                 SboCompany.CompanyDB = ConfigurationManager.AppSettings["SAP_BASE"];
@@ -21,7 +22,7 @@ namespace STR_Tipo_de_Cambio.Util
                 SboCompany.UserName = ConfigurationManager.AppSettings["SAP_USUARIO"];
                 SboCompany.Password = ConfigurationManager.AppSettings["SAP_PASSWORD"];
                 SboCompany.language = BoSuppLangs.ln_Spanish_La;
-
+                */
             }
             catch (Exception ex)
             {
@@ -35,6 +36,8 @@ namespace STR_Tipo_de_Cambio.Util
             {
                 case "HANA":
                     return BoDataServerTypes.dst_HANADB;
+                case "SQL19":
+                    return BoDataServerTypes.dst_MSSQL2019;
                 case "SQL17":
                     return BoDataServerTypes.dst_MSSQL2017;
                 case "SQL16":
@@ -48,17 +51,21 @@ namespace STR_Tipo_de_Cambio.Util
             }
         }
 
-        public static void Conectar()
+        public static void Conectar(SBO sbo)
         {
             try
             {
 
-                string a = SboCompany.Server;
-                string a1 = SboCompany.CompanyDB;
-                string a2 = SboCompany.DbUserName;
-                string a3 = SboCompany.DbPassword;
-                string a4 = SboCompany.UserName;
-                string a5 = SboCompany.Password;
+                SboCompany = new Company();
+                SboCompany.Server = sbo.SAP_SERVIDOR;
+                SboCompany.CompanyDB = sbo.SAP_BASE;
+                SboCompany.DbServerType = getTypeDB(sbo.SAP_TIPO_BASE);
+                SboCompany.DbUserName = sbo.SAP_DBUSUARIO;
+                SboCompany.DbPassword = sbo.SAP_DBPASSWORD;
+                SboCompany.UserName = sbo.SAP_USUARIO;
+                SboCompany.Password = sbo.SAP_PASSWORD;
+                SboCompany.language = BoSuppLangs.ln_Spanish_La;
+
                 if (SboCompany.Connect() != 0)
                 {
                     Log.WriteToFile("CONEXION-SAPConnector:" + SboCompany.GetLastErrorDescription());
