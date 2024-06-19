@@ -253,7 +253,7 @@ namespace STR_Tipo_de_Cambio
             catch (Exception ex)
             {
                 Log.WriteToFile($"Metodo CONSULTA API - Error al Actualizar en SAP {sbo.SAP_BASE} -:" + ex.Message);
-                IntegrarTipoCambioSBS(sbo).Wait();
+               // IntegrarTipoCambioSBS(sbo).Wait();
             }
 
         }

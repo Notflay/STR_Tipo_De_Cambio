@@ -46,6 +46,8 @@ namespace STR_Tipo_de_Cambio.Util
                     return BoDataServerTypes.dst_MSSQL2014;
                 case "SQL12":
                     return BoDataServerTypes.dst_MSSQL2012;
+                case "SQL08":
+                    return BoDataServerTypes.dst_MSSQL2008;
                 default:
                     throw new Exception("No existe tipo de base de datos");
             }

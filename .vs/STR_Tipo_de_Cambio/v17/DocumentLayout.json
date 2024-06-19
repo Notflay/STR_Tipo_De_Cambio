@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\sebastian.poma\\Desktop\\STR_Tipo_De_Cambio\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5C463F62-2EB2-47BA-85D2-E47190F2FF95}|STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj|C:\\Users\\sebastian.poma\\Desktop\\STR_Tipo_De_Cambio\\str_tipo_de_cambio\\conexion.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{5C463F62-2EB2-47BA-85D2-E47190F2FF95}|STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj|solutionrelative:str_tipo_de_cambio\\conexion.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+      "AbsoluteMoniker": "D:0:0:{6A1531EC-9224-4D33-9442-23BE3F1DB7C6}|STR_Tipo_de_Cambio.Util\\STR_Tipo_de_Cambio.Util.csproj|c:\\users\\sebastian.poma\\desktop\\str_tipo_de_cambio\\str_tipo_de_cambio.util\\sapconnector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6A1531EC-9224-4D33-9442-23BE3F1DB7C6}|STR_Tipo_de_Cambio.Util\\STR_Tipo_de_Cambio.Util.csproj|solutionrelative:str_tipo_de_cambio.util\\sapconnector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5C463F62-2EB2-47BA-85D2-E47190F2FF95}|STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj|c:\\users\\sebastian.poma\\desktop\\str_tipo_de_cambio\\str_tipo_de_cambio\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5C463F62-2EB2-47BA-85D2-E47190F2FF95}|STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj|solutionrelative:str_tipo_de_cambio\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C463F62-2EB2-47BA-85D2-E47190F2FF95}|STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj|C:\\Users\\sebastian.poma\\Desktop\\STR_Tipo_De_Cambio\\str_tipo_de_cambio\\conexion.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{5C463F62-2EB2-47BA-85D2-E47190F2FF95}|STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj|solutionrelative:str_tipo_de_cambio\\conexion.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
@@ -28,7 +32,7 @@
               "RelativeDocumentMoniker": "STR_Tipo_de_Cambio\\Program.cs",
               "ToolTip": "C:\\Users\\sebastian.poma\\Desktop\\STR_Tipo_De_Cambio\\STR_Tipo_de_Cambio\\Program.cs",
               "RelativeToolTip": "STR_Tipo_de_Cambio\\Program.cs",
-              "ViewState": "AQIAAIEAAAAAAAAAAAAawI0AAAAcAAAA",
+              "ViewState": "AQIAAFgAAAAAAAAAAADgv2MAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-19T20:05:24.996Z",
               "IsPinned": true,
@@ -36,7 +40,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "conexion.xml",
               "DocumentMoniker": "C:\\Users\\sebastian.poma\\Desktop\\STR_Tipo_De_Cambio\\STR_Tipo_de_Cambio\\conexion.xml",
               "RelativeDocumentMoniker": "STR_Tipo_de_Cambio\\conexion.xml",
@@ -46,6 +50,19 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
               "WhenOpened": "2024-05-09T15:32:38.484Z",
               "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SAPConnector.cs",
+              "DocumentMoniker": "C:\\Users\\sebastian.poma\\Desktop\\STR_Tipo_De_Cambio\\STR_Tipo_de_Cambio.Util\\SAPConnector.cs",
+              "RelativeDocumentMoniker": "STR_Tipo_de_Cambio.Util\\SAPConnector.cs",
+              "ToolTip": "C:\\Users\\sebastian.poma\\Desktop\\STR_Tipo_De_Cambio\\STR_Tipo_de_Cambio.Util\\SAPConnector.cs",
+              "RelativeToolTip": "STR_Tipo_de_Cambio.Util\\SAPConnector.cs",
+              "ViewState": "AQIAABoAAAAAAAAAAAAqwCQAAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-19T20:35:24.694Z",
               "EditorCaption": ""
             },
             {
