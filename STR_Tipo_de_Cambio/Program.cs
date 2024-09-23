@@ -15,24 +15,66 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
+using System.Configuration;
 
 namespace STR_Tipo_de_Cambio
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            // Hacer logica dewl fro 
-            // Obtener data del archivo de conexion.xml
+            // Obtener la ruta del archivo de conexión
             string filePath = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "conexion.xml");
 
             try
             {
-                // Cargar el archivo XML
-                XDocument xmlDoc = XDocument.Load(filePath);
+                // Cargar el archivo XML y obtener la lista de conexiones SBO
+                List<SBO> sboList = ObtenerListaDeSBOs(filePath);
 
-                // Obtener la lista de elementos SBO
-                List<SBO> sboList = new List<SBO>();
+                // Obtener el tipo de cambio una sola vez
+                double tipoCambio = await ObtenerTipoCambio();
+
+                if (tipoCambio == 0)
+                {
+                    Console.WriteLine("No se pudo obtener el tipo de cambio.");
+                    return;
+                }
+
+                // Conectar a cada base de datos SAP y actualizar el tipo de cambio
+                foreach (var sbo in sboList)
+                {
+                    try
+                    {
+                        Console.WriteLine($"Conectando a ServerSAP: {sbo.SAP_SERVIDOR}, SBOCompany: {sbo.SAP_BASE}...");
+
+                        SAPConnector.Conectar(sbo);
+
+                        // Actualizar el tipo de cambio en SAP
+                        ActualizarTipoDeCambioEnSAP(sbo, tipoCambio);
+
+                        SAPConnector.Desconectar();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error al procesar SBO {sbo.SAP_BASE}: {ex.Message}");
+                        Log.WriteToFile($"Error al procesar SBO {sbo.SAP_BASE}: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general: {ex.Message}");
+                Log.WriteToFile($"Error general: {ex.Message}");
+            }
+        }
+
+        private static List<SBO> ObtenerListaDeSBOs(string filePath)
+        {
+            List<SBO> sboList = new List<SBO>();
+
+            try
+            {
+                XDocument xmlDoc = XDocument.Load(filePath);
 
                 foreach (var sboElement in xmlDoc.Descendants("SBO"))
                 {
@@ -66,389 +108,194 @@ namespace STR_Tipo_de_Cambio
                             case "SAP_PASSWORD":
                                 sbo.SAP_PASSWORD = value;
                                 break;
-                            default:
-                                // Opción predeterminada, puedes manejarla según tus necesidades
-                                break;
                         }
                     }
-                    // Agregar el objeto SBO a la lista
                     sboList.Add(sbo);
-                }
-
-                // Mostrar la lista de objetos SBO
-                foreach (var sbo in sboList)
-                {
-                    Console.WriteLine($"ServerSAP: {sbo.SAP_SERVIDOR}, SBOCompany: {sbo.SAP_BASE}, SBOUser: {sbo.SAP_DBUSUARIO}, SBOPassword: {sbo.SAP_DBPASSWORD}");
-
-                    SAPConnector.Conectar(sbo);
-
-                    bool procesoFinaliza = false;
-
-                    //
-                    IntegrarTipoDeCambioSelenium(sbo).Wait();
-                    //integrarTipoCambioADI(sbo).Wait();
-
-                    SAPConnector.Desconectar();
-
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error al leer el archivo XML: {ex.Message}");
+                throw;
             }
 
+            return sboList;
         }
-        private static async Task IntegrarTipoDeCambioSelenium(SBO sbo)
+
+        private static async Task<double> ObtenerTipoCambio()
+        {
+            try
+            {
+                return await ObtenerTipoCambioRamo();
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    // Intentar obtener el tipo de cambio desde SBS
+                    return await ObtenerTipoCambioDesdeSBS();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al obtener tipo de cambio desde SBS: {ex.Message}");
+                    Log.WriteToFile($"Error al obtener tipo de cambio desde SBS: {ex.Message}");
+
+                    // Si falla, intentar obtenerlo desde la SUNAT
+                    try
+                    {
+                        return await ObtenerTipoCambioDesdeSUNAT();
+                    }
+                    catch (Exception exSunat)
+                    {
+                        Console.WriteLine($"Error al obtener tipo de cambio desde SUNAT: {exSunat.Message}");
+                        Log.WriteToFile($"Error al obtener tipo de cambio desde SUNAT: {exSunat.Message}");
+
+                        throw;
+                        // return 0; // Devuelve 0 si no se pudo obtener el tipo de cambio
+                    }
+                }
+            } 
+        }
+        private static async Task<double> ObtenerTipoCambioRamo()
+        {
+            try
+            {
+                string _link = ConfigurationManager.AppSettings["tpocambio_endpoint"];
+                int _ejecucion = Convert.ToInt32(ConfigurationManager.AppSettings["dia_later"]);
+                string _uri = $"{_link}tipoCambio?later={_ejecucion}";
+                HttpClient client = new HttpClient();
+                HttpRequestMessage request = new HttpRequestMessage();
+                request.RequestUri = new Uri(_uri);
+                request.Method = HttpMethod.Get;
+
+                Log.WriteToFile($"ObtenerTipoCambioRamo - GET - {_uri}");
+
+                var response = await client.SendAsync(request);
+            
+                if (response.IsSuccessStatusCode)
+                {
+                    return Convert.ToDouble(response.Content.ReadAsStringAsync().Result);
+                }
+                else
+                {
+                    throw new Exception("Error al llamar al endpoint de RAMO.");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        private static async Task<double> ObtenerTipoCambioDesdeSBS()
         {
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("--headless"); // Para ejecución en segundo plano
-            IWebDriver driver = new ChromeDriver(options);
-
-            string date = System.DateTime.Now.ToString("yyyy-MM-dd");
-
-            // Que el sistema detecté el tipo de Cambio según el formato
-            CultureInfo culturaPersonalizada = new CultureInfo("es-PE");
-            culturaPersonalizada.NumberFormat.NumberDecimalSeparator = ".";
-            culturaPersonalizada.NumberFormat.NumberGroupSeparator = ",";
-            System.Threading.Thread.CurrentThread.CurrentCulture = culturaPersonalizada;
-
-            try
+            using (IWebDriver driver = new ChromeDriver(options))
             {
-                List<string> TipoCambio = new List<string>();
-
                 string url = "https://www.sbs.gob.pe/app/pp/sistip_portal/paginas/publicacion/tipocambiopromedio.aspx";
-
                 int intentos = 0;
-
                 string html = "";
-                while (intentos < 3) // Intenta 3 veces, puedes ajustar este número según tu necesidad
+
+                while (intentos < 3)
                 {
                     try
                     {
                         driver.Navigate().GoToUrl(url);
-
                         html = driver.PageSource;
 
-                        // Verificar si el HTML contiene el mensaje "Request unsuccessful"
-                        if (html.Contains("Request unsuccessful"))
-                        {
-                            Console.WriteLine("El mensaje 'Request unsuccessful' fue detectado. Refrescando la página...");
-
-                            driver.Navigate().Refresh();
-
-                            intentos++;
-                            System.Threading.Thread.Sleep(1000);
-                        }
-                        else
-                        {
+                        if (!html.Contains("Request unsuccessful"))
                             break;
-                        }
+
+                        Console.WriteLine("El mensaje 'Request unsuccessful' fue detectado. Refrescando la página...");
+                        await Task.Delay(1000); // Esperar antes de reintentar
                     }
                     catch (WebDriverException ex)
                     {
                         Console.WriteLine($"Error al cargar la página: {ex.Message}");
-
-                        // Incrementar el contador de intentos
-                        intentos++;
-
-                        // Esperar un tiempo antes de intentar de nuevo (por ejemplo, 5 segundos)
-                        System.Threading.Thread.Sleep(1000);
+                        await Task.Delay(1000); // Esperar antes de reintentar
                     }
+
+                    intentos++;
                 }
 
-             //   string html = driver.PageSource;
-
-                // Si el contador de intentos es igual al número máximo de intentos, mostrar un mensaje de error
                 if (intentos == 3)
                 {
-                    Console.WriteLine("Se ha alcanzado el número máximo de intentos. La página no se pudo cargar.");
+                    throw new Exception("Se ha alcanzado el número máximo de intentos. La página no se pudo cargar.");
                 }
 
-
-                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                var doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(html);
 
-                HtmlNode Body = doc.DocumentNode.CssSelect("body").First();
-                string sbody = Body.InnerHtml;
-                try
+                var nodes = doc.DocumentNode.SelectNodes("//td[contains(@class, 'APLI_fila2')]");
+                if (nodes == null || nodes.Count < 2 || string.IsNullOrEmpty(nodes[1].InnerText))
                 {
-                    Log.WriteToFile(doc.DocumentNode.CssSelect(".APLI_fila2").ToString());
+                    throw new Exception("Aún no se ha actualizado el tipo de Cambio SBS o el formato de la página ha cambiado.");
                 }
-                catch (Exception)
+
+                if (double.TryParse(nodes[1].InnerText, NumberStyles.Any, CultureInfo.InvariantCulture, out double tipoCambio))
                 {
-
-                    throw;
+                    return tipoCambio;
                 }
-    
-                foreach (var Node in doc.DocumentNode.CssSelect(".APLI_fila2"))
+                else
                 {
-                    TipoCambio.Add(Node.InnerHtml);
+                    throw new Exception("No se pudo convertir el tipo de cambio a un valor numérico.");
                 }
-                if (string.IsNullOrEmpty(TipoCambio[1]))
-                    throw new Exception("Aun no se ha actualizado el tipo de Cambio SBS");
-                double tipoCambio = Convert.ToDouble(TipoCambio[1]);
-
-                // Cerrar el navegador
-                driver.Quit();
-
-                SAPbobsCOM.SBObob bo = SAPConnector.SboCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                Console.WriteLine("Actualizando Tipo de Cambio " + tipoCambio  + " " + date + ".....");
-                Log.WriteToFile("Actualizando Tipo de Cambio " + date + ".....");
-                bo.SetCurrencyRate("USD", System.DateTime.Now, tipoCambio, true);
-                Log.WriteToFile("Tipo de Cambio del dia " + date + " : " + tipoCambio.ToString("F2"));
-
             }
-            catch (Exception ex)
-            {
-                // Cerrar el navegador
-                driver.Quit();
-                Log.WriteToFile($"Metodo IntegrarTipoDeCambioSelenium - Error al Actualizar en SAP {sbo.SAP_BASE} -:" + ex.Message);
-                IntegrarTipoCambioSBS(sbo).Wait();
-            }
-
         }
-        private static async Task IntegrarTipodeCambioSUNAT(SBO sbo)
+
+        private static async Task<double> ObtenerTipoCambioDesdeSUNAT()
         {
             try
             {
-                // Que el sistema detecté el tipo de Cambio según el formato
-                CultureInfo culturaPersonalizada = new CultureInfo("es-PE");
-                culturaPersonalizada.NumberFormat.NumberDecimalSeparator = ".";
-                culturaPersonalizada.NumberFormat.NumberGroupSeparator = ",";
-                System.Threading.Thread.CurrentThread.CurrentCulture = culturaPersonalizada;
-
-                string date = System.DateTime.Now.ToString("dd/MM/yyyy");
-
-                List<string> TipoCambio = new List<string>();
-
                 HttpClient client = new HttpClient();
                 HttpRequestMessage request = new HttpRequestMessage();
                 request.RequestUri = new Uri("https://www.sunat.gob.pe/a/txt/tipoCambio.txt");
                 request.Method = HttpMethod.Get;
                 var response = await client.SendAsync(request);
+
                 if (response.IsSuccessStatusCode)
                 {
-                    string content = response.Content.ReadAsStringAsync().Result;
+                    string content = await response.Content.ReadAsStringAsync();
                     List<string> valores = content.Split('|').ToList();
                     string fecha = DateTime.Parse(valores[0]).ToShortDateString();
                     if (fecha == DateTime.Now.ToShortDateString())
                     {
-                        double cambioVenta = Convert.ToDouble(valores[2]);
-
-                        SAPbobsCOM.SBObob bo = SAPConnector.SboCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                        Log.WriteToFile($"Actualizando Tipo de Cambio {sbo.SAP_BASE} - " + date + ".....");
-                        bo.SetCurrencyRate("USD", System.DateTime.Now, cambioVenta, true);
-                        Log.WriteToFile($"Tipo de Cambio del dia {sbo.SAP_BASE} - " + date + " : " + cambioVenta);
+                        return Convert.ToDouble(valores[2]);
                     }
                     else
                     {
-                        throw new Exception($"No se encuentra con el cambio del día de hoy");
-                    };
-                }
-                else {
-                    throw new Exception($"Error al llamar al endpoint https://www.sunat.gob.pe/a/txt/tipoCambio.txt");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Log.WriteToFile($"Metodo CONSULTA API - Error al Actualizar en SAP {sbo.SAP_BASE} -:" + ex.Message);
-               // IntegrarTipoCambioSBS(sbo).Wait();
-            }
-
-        }
-        private static async Task IntegrarTipoDeCambioAPI(SBO sbo)
-        {
-            try
-            {
-                CultureInfo culturaPersonalizada = new CultureInfo("es-PE");
-                culturaPersonalizada.NumberFormat.NumberDecimalSeparator = ".";
-                culturaPersonalizada.NumberFormat.NumberGroupSeparator = ",";
-                System.Threading.Thread.CurrentThread.CurrentCulture = culturaPersonalizada;
-
-                string date = System.DateTime.Now.ToString("dd/MM/yyyy");
-
-                // Valida de Otras formas si no hay del día de hoy
-                // ccabceca-3f19-4e37-8479-070a87a33843-41ac9b69-2e3e-4991-aed4-34ba12980d71
-
-                HttpClient client1 = new HttpClient();
-
-                HttpRequestMessage htp = new HttpRequestMessage();
-                htp.Method = HttpMethod.Post;
-
-                TipoCambioRequest tipoCambioRequest = new TipoCambioRequest();
-                tipoCambioRequest.token = "ccabceca-3f19-4e37-8479-070a87a33843-41ac9b69-2e3e-4991-aed4-34ba12980d71";
-
-                tipoCambioRequest.tipo_cambio = new Tipo_cambioReDet()
-                {
-                    moneda = "PEN",
-                    fecha_inicio = DateTime.Now.AddDays(-1).ToString("dd/MM/yyyy"),
-                    fecha_fin = DateTime.Now.AddDays(+1).ToString("dd/MM/yyyy"),
-                };
-
-                HttpContent ctc = new StringContent(JsonConvert.SerializeObject(tipoCambioRequest), System.Text.Encoding.UTF8, "application/json");
-
-                var response2 = await client1.PostAsync("https://ruc.com.pe/api/v1/consultas", ctc);
-
-                if (response2.IsSuccessStatusCode)
-                {
-                    var respons = response2.Content.ReadAsStringAsync();
-                    TipoCambioResponse tipoCambios = JsonConvert.DeserializeObject<TipoCambioResponse>(respons.Result);
-                    int i = tipoCambios.exchange_rates.FindIndex(x => x.fecha == DateTime.Now.ToString("dd/MM/yyyy"));
-                    if (i != -1)
-                    {
-                        SAPbobsCOM.SBObob bo = SAPConnector.SboCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                        Log.WriteToFile($"Actualizando Tipo de Cambio {sbo.SAP_BASE} - " + date + ".....");
-                        bo.SetCurrencyRate("USD", System.DateTime.Now, tipoCambios.exchange_rates[i].venta, true);
-                        Log.WriteToFile($"Tipo de Cambio del dia {sbo.SAP_BASE} - " + date + " : " + tipoCambios.exchange_rates[i].venta);
-                    }
-                    else
-                    {
-                        throw new Exception("No se encuentra con el tipo de cambio del día de hoy");
+                        throw new Exception("El tipo de cambio no está actualizado para hoy.");
                     }
                 }
                 else
                 {
-                    throw new Exception($"Error al llamar al endpoint https://ruc.com.pe/api/v1/consultas");
+                    throw new Exception("Error al llamar al endpoint de SUNAT.");
                 }
             }
             catch (Exception ex)
             {
-                Log.WriteToFile($"Metodo CONSULTA API - Error al Actualizar en SAP {sbo.SAP_BASE} -:" + ex.Message);
-                IntegrarTipodeCambioSUNAT(sbo).Wait();
+                throw new Exception($"Error al obtener tipo de cambio desde SUNAT: {ex.Message}");
             }
         }
-        private static async Task IntegrarTipoCambioSBS(SBO sbo)
+
+        private static void ActualizarTipoDeCambioEnSAP(SBO sbo, double tipoCambio)
         {
             try
             {
-                // Que el sistema detecté el tipo de Cambio según el formato
-                CultureInfo culturaPersonalizada = new CultureInfo("es-PE");
-                culturaPersonalizada.NumberFormat.NumberDecimalSeparator = ".";
-                culturaPersonalizada.NumberFormat.NumberGroupSeparator = ",";
-                System.Threading.Thread.CurrentThread.CurrentCulture = culturaPersonalizada;
-
                 string date = System.DateTime.Now.ToString("dd/MM/yyyy");
 
-                List<string> TipoCambio = new List<string>();
-                var handler = new HttpClientHandler();
-                var client = new HttpClient(handler);
-                var rq = new HttpRequestMessage();
-
-                var cookies = new CookieContainer();
-                handler.CookieContainer = cookies;
-
-                rq.RequestUri = new Uri("https://www.sbs.gob.pe/app/pp/sistip_portal/paginas/publicacion/tipocambiopromedio.aspx");
-                rq.Method = HttpMethod.Get;
-                // rq.Headers.Add("Content-Type", "application/json");
-                //rq.Headers.Add("Upgrade-Insecure-Requests", "1");
-                //rq.Headers.Add("Sec-Fetch-Dest", "document");
-                //rq.Headers.Add("Sec-Fetch-Mode", "navigate");
-                //rq.Headers.Add("Sec-Fetch-Site", "none");
-                //rq.Headers.Add("Sec-Fetch-User", "?1");
-                //rq.Headers.Add("Priority", "u=1");
-                //rq.Headers.Add("TE", "trailers");
-                //rq.Headers.Add("Host", "www.sbs.gob.pe");
-                //rq.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8");
-                //rq.Headers.Add("Accept-Language", "es-ES,es;q=0.5");
-                //rq.Headers.Add("Accept-Encoding", "gzip, deflate, br, zstd");
-                //rq.Headers.Add("Connection", "keep-alive");
-                //rq.Headers.Add("DNT", "1");
-                //rq.Headers.Add("Sec-GPC", "1");
-                //rq.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0");
-                rq.Headers.Add("Upgrade-Insecure-Requests", "1");
-                rq.Headers.Add("Sec-Ch-Ua", "\"Google Chrome\";v=\"125\", \"Chromium\";v=\"125\", \"Not.A/Brand\";v=\"24\"");
-                rq.Headers.Add("Sec-Ch-Ua-Mobile", "?0");
-                rq.Headers.Add("Sec-Ch-Ua-Platform", "?0");
-                rq.Headers.Add("Sec-Fetch-Dest", "document");
-                rq.Headers.Add("Sec-Fetch-Mode", "navigate");
-                rq.Headers.Add("Sec-Fetch-Site", "none");
-                rq.Headers.Add("Sec-Fetch-User", "?1");
-                rq.Headers.Add("Priority", "u=0, i");
-                rq.Headers.Add("Referer", "https://www.google.com/");
-                rq.Headers.Add("TE", "trailers");
-                rq.Headers.Add("Host", "www.sbs.gob.pe");
-                rq.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
-                rq.Headers.Add("Accept-Language", "es-ES,es;q=0.5");
-                rq.Headers.Add("Accept-Encoding", "gzip, deflate, br, zstd");
-                rq.Headers.Add("Connection", "keep-alive");
-                rq.Headers.Add("DNT", "1");
-                rq.Headers.Add("Sec-GPC", "1");
-                rq.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0");
-                //var responseCookies = new List<System.Net.Cookie>();
-
-                var handler1 = new HttpClientHandler();
-                var client1 = new HttpClient(handler1);
-                var cookies1 = new CookieContainer();
-
-                //foreach (var cookie in responseCookies)
-                //{
-                //    cookies1.Add(cookie);
-                //}
-
-                cookies1.Add(ParseCookie("dtCookie=v_4_srv_1_sn_11E9A519CE524C01BC3652B7184423BB_perc_100000_ol_0_mul_1_app-3Aa7babc1dd8d57c64_0; Path=/; Domain=sbs.gob.pe;", rq.RequestUri));
-
-                handler.CookieContainer = cookies1;
-
-                var response = await client.GetAsync("https://www.sbs.gob.pe/app/pp/sistip_portal/paginas/publicacion/tipocambiopromedio.aspx");
-               // responseCookies.Add(ParseCookie(value, rq.RequestUri));
-
-                /*
-                var responseCookies = new List<System.Net.Cookie>();
-                foreach (var header in response.Headers)
-                {
-                    if (header.Key.ToLower() == "set-cookie")
-                    {
-                        var t = header;
-                        foreach (var value in header.Value)
-                        {
-                            responseCookies.Add(ParseCookie(value, rq.RequestUri));
-                        }
-                    }
-                }
-
-                var handler1 = new HttpClientHandler();
-                var client1 = new HttpClient(handler1);
-                var cookies1 = new CookieContainer();
-
-                foreach (var cookie in responseCookies)
-                {
-                    cookies1.Add(cookie);
-                }
-
-                handler1.CookieContainer = cookies1;
-
-                var segundaSolicitud = await client1.GetAsync("https://www.sbs.gob.pe/app/pp/sistip_portal/paginas/publicacion/tipocambiopromedio.aspx");
-                */
-                var contenido = await response.Content.ReadAsStringAsync();
-                
-                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                doc.LoadHtml(contenido);
-
-                HtmlNode Body = doc.DocumentNode.CssSelect("body").First();
-                string sbody = Body.InnerHtml;
-
-                foreach (var Node in doc.DocumentNode.CssSelect(".APLI_fila2"))
-                {
-                    TipoCambio.Add(Node.InnerHtml);
-                }
-                if (string.IsNullOrEmpty(TipoCambio[1]))
-                    throw new Exception("Aun no se ha actualizado el tipo de Cambio SBS");
-                double tipoCambio = Convert.ToDouble(TipoCambio[1]);
-                //double tipoCambio = Convert.ToDouble(TipoCambio[1]);
-
                 SAPbobsCOM.SBObob bo = SAPConnector.SboCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                Log.WriteToFile("Actualizando Tipo de Cambio " + date + ".....");
-                bo.SetCurrencyRate("USD", System.DateTime.Now, tipoCambio, true);
-                Log.WriteToFile("Tipo de Cambio del dia " + date + " : " + tipoCambio);
-
+                Log.WriteToFile($"Actualizando Tipo de Cambio {sbo.SAP_BASE} - {date}.....");
+                bo.SetCurrencyRate("USD", ConfigurationManager.AppSettings["dia_later"] == "1" ? System.DateTime.Now.AddDays(1) : System.DateTime.Now, tipoCambio, true);
+                Log.WriteToFile($"Tipo de Cambio del día {sbo.SAP_BASE} - {date}: {tipoCambio}");
             }
             catch (Exception ex)
             {
-                Log.WriteToFile($"Metodo SBS - Error al Actualizar en SAP {sbo.SAP_BASE} :" + ex.Message);
-                IntegrarTipoDeCambioAPI(sbo).Wait();
+                Console.WriteLine($"Error al actualizar tipo de cambio en SAP {sbo.SAP_BASE}: {ex.Message}");
+                Log.WriteToFile($"Error al actualizar tipo de cambio en SAP {sbo.SAP_BASE}: {ex.Message}");
             }
         }
+
         static System.Net.Cookie ParseCookie(string cookieString, Uri defaultUri)
         {
             // Aquí puedes implementar tu lógica de análisis de cookies
@@ -493,54 +340,11 @@ namespace STR_Tipo_de_Cambio
 
             return cookie;
         }
-        private static async Task integrarTipoCambioADI(SBO sbo)
-        {
-            try
-            {
-                // Que el sistema detecté el tipo de Cambio según el formato
-                CultureInfo culturaPersonalizada = new CultureInfo("es-PE");
-                culturaPersonalizada.NumberFormat.NumberDecimalSeparator = ".";
-                culturaPersonalizada.NumberFormat.NumberGroupSeparator = ",";
-                System.Threading.Thread.CurrentThread.CurrentCulture = culturaPersonalizada;
-
-                string date = System.DateTime.Now.ToString("dd/MM/yyyy");
-
-                List<string> TipoCambio = new List<string>();
-
-                HtmlWeb oWeb = new HtmlWeb();
-                HtmlAgilityPack.HtmlDocument doc = oWeb.Load("https://www.sbs.gob.pe/app/pp/sistip_portal/paginas/publicacion/tipocambiopromedio.aspx#");
-
-
-                HtmlNode Body = doc.DocumentNode.CssSelect("body").First();
-                string sbody = Body.InnerHtml;
-
-                foreach (var Node in doc.DocumentNode.CssSelect(".APLI_fila2"))
-                {
-                    TipoCambio.Add(Node.InnerHtml);
-                }
-                if (string.IsNullOrEmpty(TipoCambio[1]))
-                    throw new Exception("Aun no se ha actualizado el tipo de Cambio SBS");
-                double tipoCambio = Convert.ToDouble(TipoCambio[1]);
-                //double tipoCambio = Convert.ToDouble(TipoCambio[1]);
-
-                SAPbobsCOM.SBObob bo = SAPConnector.SboCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoBridge);
-                Log.WriteToFile("Actualizando Tipo de Cambio " + date + ".....");
-                bo.SetCurrencyRate("USD", System.DateTime.Now, tipoCambio, true);
-                Log.WriteToFile("Tipo de Cambio del dia " + date + " : " + tipoCambio);
-
-            }
-            catch (Exception ex)
-            {
-                Log.WriteToFile($"Metodo SBS - Error al Actualizar en SAP {sbo.SAP_BASE} :" + ex.Message);
-            }
-        }
-
         public class TipoCambioRequest
         {
             public string token { get; set; }
             public Tipo_cambioReDet tipo_cambio { get; set; }
         }
-
         public class Tipo_cambioReDet
         {
             public string moneda { get; set; }

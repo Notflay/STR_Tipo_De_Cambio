@@ -6,7 +6,7 @@
 		<add key="SAP_TIPO_BASE" value="HANA" />
 		<add key="SAP_DBUSUARIO" value="SYSTEM" />
 		<add key="SAP_DBPASSWORD" value="3X2FtBKU7j7eC" />
-		<add key="SAP_USUARIO" value="desa2" />
+		<add key="SAP_USUARIO" value="manager" />
 		<add key="SAP_PASSWORD" value="1234" />
 	</SBO>
 	<SBO>
@@ -15,16 +15,7 @@
 		<add key="SAP_TIPO_BASE" value="HANA" />
 		<add key="SAP_DBUSUARIO" value="SYSTEM" />
 		<add key="SAP_DBPASSWORD" value="3X2FtBKU7j7eC" />
-		<add key="SAP_USUARIO" value="desa2" />
-		<add key="SAP_PASSWORD" value="1234" />
-	</SBO>
-	<SBO>
-		<add key="SAP_SERVIDOR" value="NDB@imphdb:30013" />
-		<add key="SAP_BASE" value="ZZ_0703_LAPLATA" />
-		<add key="SAP_TIPO_BASE" value="HANA" />
-		<add key="SAP_DBUSUARIO" value="SYSTEM" />
-		<add key="SAP_DBPASSWORD" value="3X2FtBKU7j7eC" />
 		<add key="SAP_USUARIO" value="manager" />
-		<add key="SAP_PASSWORD" value="l4pl4t4" />
+		<add key="SAP_PASSWORD" value="1234" />
 	</SBO>
 </CONEXION>

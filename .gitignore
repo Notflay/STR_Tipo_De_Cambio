@@ -2,11 +2,5 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/STR_Tipo_de_Cambio/FileContentIndex/7eb33572-a495-4d83-a1d3-42d758380b32.vsidx
-/.vs/STR_Tipo_de_Cambio/FileContentIndex/5c7699d0-0543-4947-866e-5aebdd671b0f.vsidx
-/.vs/STR_Tipo_de_Cambio/FileContentIndex/acec4cb4-039e-4be6-b3a6-193dae63da85.vsidx
-/.vs/STR_Tipo_de_Cambio/FileContentIndex/915e8199-348c-460a-a5c3-4801221d7fe6.vsidx
-/.vs/STR_Tipo_de_Cambio/FileContentIndex/ab40a958-7216-4cf4-a2f6-dad6003b7579.vsidx
-/.vs/STR_Tipo_de_Cambio/FileContentIndex/ef25fc01-4d14-4321-8ee8-3144a3668cd6.vsidx
-/.vs/STR_Tipo_de_Cambio/FileContentIndex/f8b1c784-bdf7-4673-b956-02f9ce17c792.vsidx
-/.vs/STR_Tipo_de_Cambio/FileContentIndex/502e7ebd-cfea-4e3a-95a7-605961214a75.vsidx
+/.vs/STR_Tipo_de_Cambio/FileContentIndex/*
+/.vs/STR_Tipo_de_Cambio/v17/*
