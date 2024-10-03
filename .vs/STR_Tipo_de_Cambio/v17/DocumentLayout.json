@@ -7,14 +7,8 @@
       "RelativeMoniker": "D:0:0:{5C463F62-2EB2-47BA-85D2-E47190F2FF95}|STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj|solutionrelative:str_tipo_de_cambio\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|STR_Tipo_de_Cambio||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5C463F62-2EB2-47BA-85D2-E47190F2FF95}|STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj|c:\\users\\sebastian.poma\\source\\repos\\str_tipo_de_cambio\\str_tipo_de_cambio\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
       "RelativeMoniker": "D:0:0:{5C463F62-2EB2-47BA-85D2-E47190F2FF95}|STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj|solutionrelative:str_tipo_de_cambio\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5C463F62-2EB2-47BA-85D2-E47190F2FF95}|STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj|c:\\users\\sebastian.poma\\source\\repos\\str_tipo_de_cambio\\str_tipo_de_cambio\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|a54ad834-9219-4aa6-b589-607af21c3e26"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,22 +28,10 @@
               "RelativeDocumentMoniker": "STR_Tipo_de_Cambio\\Program.cs",
               "ToolTip": "C:\\Users\\sebastian.poma\\Source\\Repos\\STR_Tipo_De_Cambio\\STR_Tipo_de_Cambio\\Program.cs",
               "RelativeToolTip": "STR_Tipo_de_Cambio\\Program.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAYwBEAAAAbAAAAAAAAAA==",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAUwDcAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-19T20:05:24.996Z",
               "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "STR_Tipo_de_Cambio",
-              "DocumentMoniker": "C:\\Users\\sebastian.poma\\Source\\Repos\\STR_Tipo_De_Cambio\\STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj",
-              "RelativeDocumentMoniker": "STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj",
-              "ToolTip": "C:\\Users\\sebastian.poma\\Source\\Repos\\STR_Tipo_De_Cambio\\STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj",
-              "RelativeToolTip": "STR_Tipo_de_Cambio\\STR_Tipo_de_Cambio.csproj",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-09-23T16:54:49.159Z",
               "EditorCaption": ""
             },
             {
@@ -82,15 +64,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "App.config",
               "DocumentMoniker": "C:\\Users\\sebastian.poma\\Source\\Repos\\STR_Tipo_De_Cambio\\STR_Tipo_de_Cambio\\App.config",
               "RelativeDocumentMoniker": "STR_Tipo_de_Cambio\\App.config",
               "ToolTip": "C:\\Users\\sebastian.poma\\Source\\Repos\\STR_Tipo_De_Cambio\\STR_Tipo_de_Cambio\\App.config",
               "RelativeToolTip": "STR_Tipo_de_Cambio\\App.config",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2024-09-23T16:00:01.059Z",
+              "WhenOpened": "2024-09-30T05:41:25.559Z",
               "EditorCaption": ""
             }
           ]

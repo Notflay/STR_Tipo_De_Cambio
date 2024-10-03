@@ -1,0 +1,1 @@
+30/09/2024 00:42:19 - ObtenerTipoCambioRamo - GET - http://impperu.ramo.com.br:7071/api/tipoCambio?later=0

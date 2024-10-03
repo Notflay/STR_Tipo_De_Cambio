@@ -28,6 +28,10 @@ namespace STR_Tipo_de_Cambio
 
             try
             {
+                CultureInfo culturaPersonalizada = new CultureInfo("es-PE");
+                culturaPersonalizada.NumberFormat.NumberDecimalSeparator = ".";
+                culturaPersonalizada.NumberFormat.NumberGroupSeparator = ",";
+                System.Threading.Thread.CurrentThread.CurrentCulture = culturaPersonalizada;
                 // Cargar el archivo XML y obtener la lista de conexiones SBO
                 List<SBO> sboList = ObtenerListaDeSBOs(filePath);
 
